@@ -1,0 +1,266 @@
+/* ============================================================
+   StarTracker — style.css
+   Aesthetic: deep-space immersive, mobile-first
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700&family=Rajdhani:wght@300;400;600&display=swap');
+
+/* ── Reset / Base ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  font-family: 'Exo 2', sans-serif;
+  color: #e8f0ff;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Canvas layers ── */
+#galaxy-bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  z-index: 0;
+  /* The galaxy nebula is drawn by JS onto this canvas */
+}
+
+#sky-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  touch-action: none;
+  cursor: grab;
+  z-index: 1;
+}
+
+#sky-canvas:active {
+  cursor: grabbing;
+}
+
+/* ── Top HUD panel ── */
+#hud-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  padding: 14px 18px 10px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.72) 0%,
+    rgba(0, 0, 0, 0.0) 100%
+  );
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  pointer-events: none;
+}
+
+#hud-left {
+  flex: 1;
+}
+
+#app-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 0 20px rgba(140, 180, 255, 0.7);
+}
+
+#app-subtitle {
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(180, 200, 255, 0.55);
+  margin-top: 2px;
+}
+
+#status-line {
+  font-size: 11px;
+  font-weight: 400;
+  color: rgba(200, 220, 255, 0.85);
+  margin-top: 8px;
+  letter-spacing: 0.5px;
+}
+
+#location-line,
+#motion-line,
+#count-line {
+  font-size: 10px;
+  font-weight: 300;
+  color: rgba(160, 190, 255, 0.60);
+  margin-top: 2px;
+  letter-spacing: 0.3px;
+}
+
+/* ── Bottom info bar ── */
+#bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  padding: 10px 18px 18px;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.65) 0%,
+    rgba(0, 0, 0, 0.0) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+#compass-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  text-shadow: 0 0 16px rgba(100, 160, 255, 0.8);
+  line-height: 1;
+}
+
+#pitch-label {
+  font-size: 11px;
+  color: rgba(160, 200, 255, 0.65);
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+#time-display {
+  text-align: right;
+}
+
+#time-value {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: rgba(220, 235, 255, 0.90);
+}
+
+#date-value {
+  font-size: 10px;
+  font-weight: 300;
+  color: rgba(160, 190, 255, 0.55);
+  letter-spacing: 0.5px;
+  margin-top: 1px;
+}
+
+/* ── Motion button ── */
+#motion-btn {
+  position: fixed;
+  right: 16px;
+  top: 16px;
+  z-index: 30;
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(200, 220, 255, 0.9);
+  border: 1px solid rgba(120, 160, 255, 0.3);
+  padding: 9px 14px;
+  border-radius: 30px;
+  font-family: 'Exo 2', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: background 0.2s, border-color 0.2s;
+  box-shadow: 0 0 18px rgba(80, 140, 255, 0.18);
+}
+
+#motion-btn:hover {
+  background: rgba(80, 140, 255, 0.15);
+  border-color: rgba(120, 180, 255, 0.55);
+}
+
+#motion-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* ── Crosshair reticle (pure CSS, center of screen) ── */
+#reticle {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 15;
+  width: 38px;
+  height: 38px;
+  pointer-events: none;
+}
+
+#reticle::before,
+#reticle::after {
+  content: '';
+  position: absolute;
+  background: rgba(180, 210, 255, 0.35);
+}
+
+/* horizontal bar */
+#reticle::before {
+  width: 100%;
+  height: 1px;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+/* vertical bar */
+#reticle::after {
+  width: 1px;
+  height: 100%;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+}
+
+.reticle-ring {
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  border: 1px solid rgba(160, 200, 255, 0.28);
+}
+
+/* ── Hint text ── */
+#hint-text {
+  position: fixed;
+  bottom: 68px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(160, 200, 255, 0.4);
+  white-space: nowrap;
+  pointer-events: none;
+  animation: fadeHint 6s ease forwards;
+}
+
+@keyframes fadeHint {
+  0%   { opacity: 1; }
+  60%  { opacity: 1; }
+  100% { opacity: 0; }
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Orbital</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Layer 0: Galaxy / nebula background canvas (moves with view) -->
+  <canvas id="galaxy-bg"></canvas>
+
+  <!-- Layer 1: Sky objects canvas (stars, planets, constellation lines) -->
+  <canvas id="sky-canvas"></canvas>
+
+  <!-- Layer 2: CSS reticle (center crosshair) -->
+  <div id="reticle">
+    <div class="reticle-ring"></div>
+  </div>
+
+  <!-- Layer 3: HUD top -->
+  <div id="hud-panel">
+    <div id="hud-left">
+      <div id="app-title">ORBITAL</div>
+      <div id="app-subtitle">sky map</div>
+      <div id="status-line">Loading…</div>
+      <div id="location-line"></div>
+      <div id="motion-line"></div>
+      <div id="count-line"></div>
+    </div>
+  </div>
+
+  <!-- Layer 3: HUD bottom -->
+  <div id="bottom-bar">
+    <div>
+      <div id="compass-label">N</div>
+      <div id="pitch-label">↑ 55°</div>
+    </div>
+    <div id="time-display">
+      <div id="time-value">--:--:--</div>
+      <div id="date-value">---</div>
+    </div>
+  </div>
+
+  <!-- Motion toggle button -->
+  <button id="motion-btn">Enable motion</button>
+
+  <!-- Drag hint (fades out) -->
+  <div id="hint-text">Drag to explore the sky</div>
+
+  <!-- Astronomy engine (load first) -->
+  <script src="astronomy.browser.js"></script>
+  <!-- App logic -->
+  <script src="script.js"></script>
+</body>
+</html>

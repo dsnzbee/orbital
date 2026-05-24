@@ -245,7 +245,7 @@ function buildGalaxyTexture() {
   const mwGrad = ctx.createLinearGradient(0, H * 0.2, W, H * 0.8);
   mwGrad.addColorStop(0,   "rgba(0,0,0,0)");
   mwGrad.addColorStop(0.2, "rgba(30,40,70,0.22)");
-  mwGrad.addColorStop(0.5, "rgba(55,65,100,0.28)");
+  mwGrad.addColorStop(0.5, "rgba(145, 122, 199, 0.28)");
   mwGrad.addColorStop(0.8, "rgba(30,40,70,0.22)");
   mwGrad.addColorStop(1,   "rgba(0,0,0,0)");
   ctx.fillStyle = mwGrad;
@@ -381,7 +381,7 @@ function drawGlowStar(x, y, radius, color, glowSize) {
   const grd = ctx.createRadialGradient(x, y, 0, x, y, glowSize);
   grd.addColorStop(0,   color);
   grd.addColorStop(0.3, colorWithAlpha(color, 0.4));
-  grd.addColorStop(1,   "rgba(0,0,0,0)");
+  grd.addColorStop(1,   "rgba(70, 70, 70, 0)");
   ctx.beginPath();
   ctx.arc(x, y, glowSize, 0, Math.PI * 2);
   ctx.fillStyle = grd;
@@ -428,21 +428,6 @@ function drawPlanetLabel(text, x, y) {
   ctx.restore();
 }
 
-function drawConstellationLine(x1, y1, x2, y2) {
-  const ctx = sctx;
-  ctx.save();
-  ctx.globalAlpha = 0.45;
-  ctx.strokeStyle = "#e8505a";   // classic StarTracker red lines
-  ctx.lineWidth = 1;
-  ctx.setLineDash([3, 5]);
-  ctx.shadowColor = "rgba(255, 80, 90, 0.6)";
-  ctx.shadowBlur = 4;
-  ctx.beginPath();
-  ctx.moveTo(x1, y1);
-  ctx.lineTo(x2, y2);
-  ctx.stroke();
-  ctx.restore();
-}
 
 function drawPlanetCircle(x, y, r, color) {
   const ctx = sctx;
@@ -537,11 +522,14 @@ function drawCardinals(basis) {
     if (!pos) continue;
     ctx.beginPath();
     ctx.arc(pos.x, pos.y, 1, 0, Math.PI * 2);
-    ctx.fillStyle = "rgba(100, 160, 255, 0.25)";
+    ctx.fillStyle = "rgb(101, 132, 179)";
     ctx.fill();
   }
   ctx.restore();
+
 }
+
+
 
 // ============================================================
 // Render
@@ -623,30 +611,6 @@ function render() {
     starsVisible++;
   }
 
-  // ── Constellation lines ──
-  for (const seg of CONSTELLATION_LINES) {
-    if (!Array.isArray(seg) || seg.length !== 2) continue;
-    const [a, b] = seg;
-    if (!Array.isArray(a) || !Array.isArray(b)) continue;
-
-    const starA = STAR_CATALOG[a[1]];
-    const starB = STAR_CATALOG[b[1]];
-    if (!starA || !starB) continue;
-
-    const eqA  = starToEquator(starA);
-    const eqB  = starToEquator(starB);
-    const horA = Astronomy.Horizon(now, state.observer, eqA.ra, eqA.dec, "normal");
-    const horB = Astronomy.Horizon(now, state.observer, eqB.ra, eqB.dec, "normal");
-
-    if (horA.altitude < -2 && horB.altitude < -2) continue;
-
-    const posA = project(horizonToVector(horA.azimuth, horA.altitude), basis);
-    const posB = project(horizonToVector(horB.azimuth, horB.altitude), basis);
-    if (!posA || !posB) continue;
-
-    drawConstellationLine(posA.x, posA.y, posB.x, posB.y);
-    conLines++;
-  }
 
   // ── Planets ──
   for (const planet of PLANETS) {
@@ -742,7 +706,7 @@ async function enableMotion() {
       state.sensorHeadingDeg = normalizeAngle(360 - e.alpha);
     }
     if (typeof e.beta === "number") {
-      state.sensorPitchDeg = clamp(90 - Math.abs(e.beta), -5, 85);
+      state.sensorPitchDeg = clamp(0 - (90 - Math.abs(e.beta)), -5, 85);
     }
     state.hasSensor = true;
     scheduleRender();
